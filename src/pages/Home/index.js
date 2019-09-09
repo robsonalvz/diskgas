@@ -1,12 +1,23 @@
 import React, {Component} from 'react';
-import {Text, View} from 'react-native';
-
+import {Text, ScrollView} from 'react-native';
+import api from '../../services/api';
+import HomeItem from './HomeItem';
 export default class Home extends Component {
+  state = {
+    data: [],
+  };
+  async componentDidMount() {
+    const {data} = await api.get('api/products');
+    console.table(data);
+    this.setState({data});
+  }
   render() {
     return (
-      <View>
-        <Text> Home </Text>
-      </View>
+      <ScrollView>
+        {this.state.data.map(product => (
+          <HomeItem key={product.id} data={product} />
+        ))}
+      </ScrollView>
     );
   }
 }
